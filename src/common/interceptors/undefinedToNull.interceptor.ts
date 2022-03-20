@@ -1,0 +1,21 @@
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { map, Observable } from 'rxjs';
+
+@Injectable()
+export class UndefinedToNullInterceptor implements NestInterceptor {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler<any>,
+  ): Observable<any> | Promise<Observable<any>> {
+    //* before
+    // console.log('=========', context.switchToHttp().getRequest().originalUrl);
+    return next
+      .handle()
+      .pipe(map((data) => (data === undefined ? null : data)));
+  }
+}
